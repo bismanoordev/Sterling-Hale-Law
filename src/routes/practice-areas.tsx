@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/Layout";
 import { PracticeAreaGrid } from "@/components/site/PracticeAreas";
 import { CheckCircle2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/practice-areas")({
   head: () => ({
@@ -32,18 +33,31 @@ const whyUs = [
   "Personal attention from an experienced attorney",
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+
 function PracticeAreasPage() {
   return (
     <SiteLayout>
+      {/* Hero */}
       <section className="bg-[var(--color-navy-deep)] text-[var(--color-cream)] pt-40 pb-24">
         <div className="container-x max-w-4xl">
-          <p className="eyebrow mb-6">Practice Areas</p>
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.05]">
-            One firm. <em className="text-[var(--color-gold)] not-italic">Six core practices.</em>
-          </h1>
-          <p className="text-lg text-[var(--color-cream)]/75 mt-6 max-w-2xl leading-relaxed">
-            Whatever you're facing, we likely have an attorney who's handled it before — and won.
-          </p>
+          <motion.div variants={stagger} initial="hidden" animate="show">
+            <motion.p variants={fadeUp} className="eyebrow mb-6">Practice Areas</motion.p>
+            <motion.h1 variants={fadeUp} className="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.05]">
+              One firm. <em className="text-[var(--color-gold)] not-italic">Six core practices.</em>
+            </motion.h1>
+            <motion.p variants={fadeUp} className="text-lg text-[var(--color-cream)]/75 mt-6 max-w-2xl leading-relaxed">
+              Whatever you're facing, we likely have an attorney who's handled it before — and won.
+            </motion.p>
+          </motion.div>
         </div>
       </section>
 
@@ -53,11 +67,17 @@ function PracticeAreasPage() {
         </div>
       </section>
 
-      {/* Featured: Personal Injury detail */}
+      {/* Featured: Personal Injury */}
       <section className="py-24 bg-secondary">
         <div className="container-x">
           <div className="grid lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-7">
+            <motion.div
+              className="lg:col-span-7"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, margin: "-80px" }}
+            >
               <p className="eyebrow mb-6">Featured: Personal Injury</p>
               <h2 className="font-display text-4xl md:text-5xl text-[var(--color-navy-deep)] leading-tight mb-6">
                 Personal injury attorneys who fight for full compensation.
@@ -65,19 +85,28 @@ function PracticeAreasPage() {
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
                 An injury can change everything — your health, your income, your peace of mind. If someone else's negligence caused your injury, you shouldn't have to pay the price. We help you recover the compensation you need to move forward.
               </p>
-
               <h3 className="font-display text-xl text-[var(--color-navy-deep)] mt-10 mb-4">We handle</h3>
-              <ul className="grid sm:grid-cols-2 gap-3">
+              <motion.ul
+                className="grid sm:grid-cols-2 gap-3"
+                variants={stagger} initial="hidden"
+                whileInView="show" viewport={{ once: true }}
+              >
                 {handles.map((h) => (
-                  <li key={h} className="flex items-start gap-2 text-[var(--color-navy-deep)]">
+                  <motion.li key={h} variants={fadeUp} className="flex items-start gap-2 text-[var(--color-navy-deep)]">
                     <CheckCircle2 className="w-5 h-5 text-[var(--color-gold)] mt-0.5 shrink-0" strokeWidth={2} />
                     <span>{h}</span>
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
-            </div>
+              </motion.ul>
+            </motion.div>
 
-            <aside className="lg:col-span-5 bg-[var(--color-navy-deep)] text-[var(--color-cream)] rounded-lg p-10">
+            <motion.aside
+              className="lg:col-span-5 bg-[var(--color-navy-deep)] text-[var(--color-cream)] rounded-lg p-10"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, margin: "-80px" }}
+            >
               <h3 className="font-display text-2xl mb-6">Why choose us</h3>
               <ul className="space-y-4">
                 {whyUs.map((w) => (
@@ -91,7 +120,7 @@ function PracticeAreasPage() {
                 Injured and unsure what to do next? It costs nothing to find out where you stand.
               </p>
               <Link to="/contact" className="btn-gold mt-6 w-full">Request a Free Consultation</Link>
-            </aside>
+            </motion.aside>
           </div>
         </div>
       </section>
